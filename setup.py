@@ -5,7 +5,7 @@ with open("README.rst") as readme_file:
 
 setup(
     name="pymmwr",
-    version="0.1.0",
+    version="0.2.0",
     description="MMWR weeks for Python",
     long_description=readme,
     author="Abhinav Tushar",
