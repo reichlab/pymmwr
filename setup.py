@@ -3,9 +3,6 @@ from setuptools import find_packages, setup
 with open("README.rst") as readme_file:
     readme = readme_file.read()
 
-project_url = "https://github.com/"
-project_url += "reichlab/pymmwr"
-
 setup(
     name="pymmwr",
     version="0.1.0",
@@ -13,8 +10,8 @@ setup(
     long_description=readme,
     author="Abhinav Tushar",
     author_email="lepisma@fastmail.com",
-    url=project_url,
     install_requires=[],
+    url="https://github.com/reichlab/pymmwr"
     keywords="mmwr week converter",
     packages=find_packages(),
     classifiers=(
