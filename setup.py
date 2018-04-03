@@ -12,7 +12,7 @@ setup(
     description="MMWR weeks for Python",
     long_description=readme,
     author="Abhinav Tushar",
-    author_email="abhinav.tushar.vs@gmail.com",
+    author_email="lepisma@fastmail.com",
     url=project_url,
     install_requires=[],
     keywords="mmwr week converter",
