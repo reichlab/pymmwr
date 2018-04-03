@@ -10,8 +10,8 @@ setup(
     long_description=readme,
     author="Abhinav Tushar",
     author_email="lepisma@fastmail.com",
-    install_requires=[],
     url="https://github.com/reichlab/pymmwr"
+    install_requires=["attrs"],
     keywords="mmwr week converter",
     packages=find_packages(),
     classifiers=(

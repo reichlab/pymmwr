@@ -1,7 +1,40 @@
 import datetime
-from typing import Dict
+import attr
 
-MMWR_week = Dict[str, int]
+
+@attr.s(slots=True, frozen=True)
+class Epiweek:
+    """
+    Immutatable and hashable Epiweek
+    """
+
+    year: int = attr.ib(validator=attr.validators.instance_of(int))
+    week: int = attr.ib(validator=attr.validators.instance_of(int))
+    day: int = attr.ib(default=1, validator=attr.validators.instance_of(int))
+
+    def __add__(self, delta):
+        new_week = self.week + delta
+
+        if delta > 0:
+            max_week = epiweeks_in_year(self.year)
+            return Epiweek(
+                year=self.year + 1 if new_week > max_week else self.year,
+                week=new_week - max_week if new_week > max_week else new_week,
+                day=self.day
+            )
+        else:
+            max_week = epiweeks_in_year(self.year - 1)
+            return Epiweek(
+                year=self.year - 1 if new_week < 1 else self.year,
+                week=max_week + new_week if new_week < 1 else new_week,
+                day=self.day
+            )
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __sub__(self, other):
+        return self.__add__(-other)
 
 
 def _start_date_of_year(year: int) -> datetime.date:
@@ -15,41 +48,20 @@ def _start_date_of_year(year: int) -> datetime.date:
     return jan_one + datetime.timedelta(days=diff)
 
 
-def mmwr_week_to_date(year: int, week: int, day: int = 1) -> datetime.date:
+def epiweek_to_date(ew: Epiweek) -> datetime.date:
     """
-    Return date of given week (starts at Sunday)
+    Return date from epiweek (starts at Sunday)
     """
 
-    day_one = _start_date_of_year(year)
-    diff = 7 * (week - 1) + (day - 1)
+    day_one = _start_date_of_year(ew.year)
+    diff = 7 * (ew.week - 1) + (ew.day - 1)
 
     return day_one + datetime.timedelta(days=diff)
 
 
-def mmwr_week_with_delta(year: int, week: int, delta: int) -> MMWR_week:
+def date_to_epiweek(date=datetime.date.today()) -> Epiweek:
     """
-    Return MMWR week with given week delta
-    """
-
-    out = week + delta
-
-    if delta > 0:
-        max_week = mmwr_weeks_in_year(year)
-        return {
-            "year": year + 1 if out > max_week else year,
-            "week": out - max_week if out > max_week else out
-        }
-    else:
-        max_week = mmwr_weeks_in_year(year - 1)
-        return {
-            "year": year - 1 if out < 1 else year,
-            "week": max_week + out if out < 1 else out
-        }
-
-
-def date_to_mmwr_week(date=datetime.date.today()) -> MMWR_week:
-    """
-    Convert python datetime to mmwr week dictionary
+    Convert python date to Epiweek
     """
 
     year = date.year
@@ -61,19 +73,19 @@ def date_to_mmwr_week(date=datetime.date.today()) -> MMWR_week:
     elif date >= start_dates[2]:
         start_date = start_dates[2]
 
-    return {
-        "year": (start_date + datetime.timedelta(days=7)).year,
-        "week": ((date - start_date).days // 7) + 1,
-        "day": (date.isoweekday() % 7) + 1
-    }
+    return Epiweek(
+        year=(start_date + datetime.timedelta(days=7)).year,
+        week=((date - start_date).days // 7) + 1,
+        day=(date.isoweekday() % 7) + 1
+    )
 
 
-def mmwr_weeks_in_year(year: int) -> int:
+def epiweeks_in_year(year: int) -> int:
     """
-    Return number of mmwr weeks in a year
+    Return number of epiweeks in a year
     """
 
-    if date_to_mmwr_week(mmwr_week_to_date(year, 53))["year"] == year:
+    if date_to_epiweek(epiweek_to_date(Epiweek(year, 53))).year == year:
         return 53
     else:
         return 52
