@@ -5,12 +5,12 @@ with open("README.rst") as readme_file:
 
 setup(
     name="pymmwr",
-    version="0.2.0",
+    version="0.2.1",
     description="MMWR weeks for Python",
     long_description=readme,
     author="Abhinav Tushar",
     author_email="lepisma@fastmail.com",
-    url="https://github.com/reichlab/pymmwr"
+    url="https://github.com/reichlab/pymmwr",
     install_requires=["attrs"],
     keywords="mmwr week converter",
     packages=find_packages(),
