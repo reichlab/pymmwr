@@ -11,8 +11,8 @@ pymmwr
 `MMWR weeks <https://wwwn.cdc.gov/nndss/document/MMWR_Week_overview.pdf>`_ for
 Python. Port of `MMWRWeek <https://github.com/jarad/MMWRweek>`_.
 
-Weekdays go from Sunday (1) to Saturday (7). See ``./tests.py`` for usage
-instructions.
+Weekdays go from Sunday (1) to Saturday (7). See ``./tests/test_basic.py`` for
+usage instructions.
 
 .. code-block:: shell
 

@@ -5,7 +5,7 @@ init:
 
 .PHONY: test
 test:
-	pipenv run pytest ./tests.py
+	pipenv run python -m pytest ./tests
 	pipenv run mypy ./pymmwr.py
 
 .PHONY: publish
